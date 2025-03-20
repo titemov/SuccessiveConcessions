@@ -6,9 +6,15 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+
+import java.awt.*;
 
 public class Interface extends Application {
 
@@ -120,6 +126,14 @@ public class Interface extends Application {
         resultLabel.setLayoutY(210);
         inputGroup.getChildren().add(resultLabel);
 
+        TextArea textArea = new TextArea();
+        textArea.setLayoutX(10);
+        textArea.setLayoutY(250);
+        textArea.setMinHeight(300);
+        textArea.setMaxHeight(300);
+        textArea.setMinWidth(765);
+        textArea.setMaxWidth(765);
+
         Button enterBtn = new Button("Ввести всё");
         enterBtn.setLayoutX(270);
         enterBtn.setLayoutY(205);
@@ -167,18 +181,21 @@ public class Interface extends Application {
                 Matrix.printmat(aimInput);
                 Matrix.printmat(restrictInput);
                 //Matrix.printmat(restrictRightInput);
+
+                Backend.solve(aimInput,restrictInput,maxMin);
+                char[] text=Log.getText();
+                if (text!=null){
+                    for (int i=0;i<text.length;i++) {
+                        textArea.appendText(String.valueOf(text[i]));
+                        System.out.println(text[i]);
+                    }
+                    textArea.setFont(Font.font("Consolas", 14));
+                }
             }
         });
         inputGroup.getChildren().add(enterBtn);
 
-        TextArea textArea = new TextArea();
-        textArea.setLayoutX(10);
-        textArea.setLayoutY(250);
-        textArea.setMinHeight(300);
-        textArea.setMaxHeight(300);
-        textArea.setMinWidth(765);
-        textArea.setMaxWidth(765);
-
+        Log.initialEntry();
 
         mainGroup.getChildren().addAll(inputGroup,textArea);
 

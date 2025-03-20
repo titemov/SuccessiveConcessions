@@ -19,10 +19,10 @@ public class Backend extends Interface {
         for (int i=0;i<array.length;i++){
             for (int n=0;n<array[0].length;n++){
                 if(array[i][n]!=0){
-                    if (minRowIndex>i) minRowIndex=i;
-                    if (minColumnIndex>n) minColumnIndex=n;
-                    if (maxRowIndex<i) maxRowIndex=i;
-                    if (maxColumnIndex<n) maxColumnIndex=n;
+                    if (minRowIndex > i) minRowIndex = i;
+                    if (minColumnIndex > n) minColumnIndex = n;
+                    if (maxRowIndex < i) maxRowIndex = i;
+                    if (maxColumnIndex < n) maxColumnIndex = n;
                 }
                 //System.out.println(minRowIndex+" "+minColumnIndex+" "+maxRowIndex+" "+maxColumnIndex);
             }
@@ -36,6 +36,11 @@ public class Backend extends Interface {
             return null;
         }
 
+        if (fromRestrict) {
+            minColumnIndex = 0;
+            maxColumnIndex = array[0].length-1;
+        }
+
         result = new double[maxRowIndex-minRowIndex+1][maxColumnIndex-minColumnIndex+1];
         for (int i=0;i<(maxRowIndex-minRowIndex+1);i++){
             for(int n=0;n<(maxColumnIndex-minColumnIndex+1);n++){
@@ -44,6 +49,14 @@ public class Backend extends Interface {
         }
         //Matrix.printmat(result);
         return result;
+    }
+
+    public static int solve(double[][] aimInput, double[][] restrictInput, String[] maxMin){
+        for (int i=0;i<aimInput.length;i++) {
+            SimplexMethod.inpMatrixManual(aimInput[i],restrictInput, maxMin[i]);
+            SimplexMethod.solveTask();
+        }
+        return 0;
     }
 
 }

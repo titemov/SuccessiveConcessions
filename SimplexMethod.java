@@ -16,9 +16,12 @@ public class SimplexMethod {
     public static void solveTask() {
         int i = 1;
         while (!indexStrCalc()) {
-            System.out.println("\nИтерация " + i++);
+            int a=i++;
+            System.out.println("\nИтерация " + a);
+            Log.writeLog("\nИтерация " + a,true);
             if (!calcCheckMinIndxElCol()) {
                 System.out.println("Нет решения");
+                Log.writeLog("Нет решения",true);
                 return;
             }
             calcAttitMin();
@@ -26,9 +29,11 @@ public class SimplexMethod {
             calcNewCoef();
         }
         System.out.println("\nИтерация " + i);
+        Log.writeLog("\nИтерация " + i,true);
         printMatrix(false);
         answer = desire ? matrix[countLimit + 1][2] : -matrix[countLimit + 1][2];
         System.out.println("\nОтвет: " + answer);
+        Log.writeLog("\nОтвет: " + answer,true);
     }
     private static boolean indexStrCalc() {
         for (int i = 2; i < countCol - 1; ++i) {
@@ -92,44 +97,62 @@ public class SimplexMethod {
 
     private static void printMatrix(boolean flag) {
         System.out.printf("%" + 13 + "s", "Cij");
+        Log.writeLog((String.format("%" + 13 + "s", "Cij")),true);
         System.out.print("             ");
+        Log.writeLog("             ",false);
+
         for (int i = 2; i < countCol - 1; ++i) {
             System.out.printf("%" + 13 + "." + 3 + "f", matrix[0][i]);
+            Log.writeLog(String.format("%" + 13 + "." + 3 + "f",matrix[0][i]),false);
         }
         System.out.printf("%" + 13 + "s", "Тета\n");
+        Log.writeLog(String.format("%" + 13 + "s", "Тета\n"),false);
         if (desire) {
             System.out.printf("%" + 26 + "s", "Bx");
+            Log.writeLog(String.format("%" + 26 + "s", "Bx"),false);
         }
         else {
             System.out.printf("%" + 26 + "s", "By");
+            Log.writeLog(String.format("%" + 26 + "s", "By"),false);
         }
         for (int i = 0; i < countCol - 3; ++i) {
             System.out.printf("%" + 12 + "s", "A");
+            Log.writeLog(String.format("%" + 12 + "s", "A"),false);
             System.out.print(i);
+            Log.writeLog(String.valueOf(i),false);
         }
         System.out.println();
+        Log.writeLog(" ",true);
         int col = flag ? countCol : countCol - 1;
         for (int i = 1; i < countLimit + 1; ++i) {
             for (int j = 0; j < col; ++j) {
                 System.out.printf("%" + 13 + "." + 3 + "f", matrix[i][j]);
+                Log.writeLog(String.format("%" + 13 + "." + 3 + "f", matrix[i][j]),false);
             }
             System.out.println();
+            Log.writeLog(" ",true);
         }
         System.out.printf("%" + 26 + "s", "Дельта j");
+        Log.writeLog(String.format("%" + 26 + "s", "Дельта j"),false);
         for (int i = 2; i < countCol - 1; ++i) {
             System.out.printf("%" + 13 + "." + 3 + "f", matrix[countLimit + 1][i]);
+            Log.writeLog(String.format("%" + 13 + "." + 3 + "f", matrix[countLimit + 1][i]),false);
         }
         System.out.println("\nДопустимое базисное решение:");
+        Log.writeLog("\nДопустимое базисное решение:",true);
         System.out.print("(");
+        Log.writeLog("(",false);
         for (int i = 0; i < countCol - 4; ++i) {
             boolean check = false;
             for (int j = 1; j < countLimit + 1; ++j) {
                 if (i + 1 == matrix[j][1]) {
                     if (i != countCol - 5) {
                         System.out.print(matrix[j][2] + ", ");
+                        Log.writeLog(matrix[j][2] + ", ",false);
                     }
                     else {
                         System.out.print(matrix[j][2] + ")");
+                        Log.writeLog(matrix[j][2] + ")",false);
                     }
                     check = true;
                     break;
@@ -138,33 +161,37 @@ public class SimplexMethod {
             if (!check) {
                 if (i != countCol - 5) {
                     System.out.print(0.0 + ", ");
+                    Log.writeLog(0.0 + ", ",false);
                 }
                 else {
                     System.out.print(0.0 + ")");
+                    Log.writeLog(0.0 + ")",false);
                 }
             }
         }
         System.out.println();
+        Log.writeLog(" ",true);
     }
-    private static void inpData() {
-        Scanner scanner = new Scanner(System.in);
+    private static void inpData(double[] aimInput, int restrictAmount, String maxMin) {
         boolean check = true;
         while (check) {
-            System.out.print("Введите количество коэффициентов целевой функции: ");
-            countCoef = scanner.nextInt();
-            System.out.print("Введите количество ограничений: ");
-            countLimit = scanner.nextInt();
+            countCoef=aimInput.length;
+            System.out.println("Введите количество коэффициентов целевой функции = "+countCoef);
+            Log.writeLog("Количество коэффициентов целевой функции = "+countCoef,true);
+            countLimit=restrictAmount;
+            System.out.println("Введите количество ограничений = "+countLimit);
+            Log.writeLog("Количество ограничений = "+countLimit,true);
             if (countCoef < 1 || countLimit < 1) {
                 System.out.println("Количество ограничений и коэффициентов целевой функции не должно быть меньше единицы");
+                Log.writeLog("Количество ограничений и коэффициентов целевой функции не должно быть меньше единицы",true);
                 continue;
             }
             else {
                 check = false;
             }
-            System.out.print("Функция стремится к min или к max?: ");
             String str;
             do {
-                str = scanner.nextLine();
+                str = maxMin;
             } while (!str.equals("max") && !str.equals("min"));
             if (str.equals("max")) {
                 desire = true;
@@ -172,12 +199,14 @@ public class SimplexMethod {
             else {
                 desire = false;
             }
+            System.out.println("Функция стремится к min или к max? "+maxMin);
+            Log.writeLog("Функция стремится к "+maxMin,true);
         }
 
 
     }
-    public static void inpMatrixManual() {
-        inpData();
+    public static void inpMatrixManual(double[] aimInput, double[][] restrictInput, String maxMin) {
+        inpData(aimInput,restrictInput.length,maxMin);
         Scanner scanner = new Scanner(System.in);
         if (desire) {
             countRow = countLimit + 2;
@@ -190,10 +219,13 @@ public class SimplexMethod {
             matrix = new double[countRow][countCol];
         }
         System.out.println("Введите коэффициенты целевой функции");
+        Log.writeLog("--- Коэффициенты целевой функции ---",true);
         matrix[0][2] = 0;
         for (int i = 3; i < countCoef + 3; ++i) {
             System.out.print("Введите коэффициент целевой функции " + (i - 2) + ": ");
-            matrix[0][i] = scanner.nextDouble();
+            matrix[0][i] = aimInput[i-3];
+            System.out.println(matrix[0][i]);
+            Log.writeLog("коэффициент целевой функции " + (i - 2) + ": "+matrix[0][i],true);
             if (!desire) {
                 matrix[0][i] = -matrix[0][i];
             }
@@ -208,12 +240,16 @@ public class SimplexMethod {
         }
         for (int i = 1; i < countLimit + 1; ++i) {
             System.out.println("Ограничение " + i);
+            Log.writeLog("--- Ограничение " + i+" ---",true);
             for (int j = 3; j < countCoef + 3; ++j) {
-                System.out.print("Введите коэффициент " + (j-2) + ": ");
-                matrix[i][j] = scanner.nextDouble();
+                matrix[i][j] = restrictInput[i-1][j-3];
+                System.out.println("Введите коэффициент " + (j-2) + ": "+matrix[i][j]);
+                Log.writeLog("Коэффициент ограничения " + (j-2) + ": "+matrix[i][j],true);
             }
-            System.out.print("Правая часть ограничения " + i + ": ");
-            matrix[i][2] = scanner.nextDouble();
+
+            matrix[i][2] = restrictInput[i-1][restrictInput[0].length-1];
+            System.out.println("Правая часть ограничения " + i + ": "+matrix[i][2]);
+            Log.writeLog("Правая часть ограничения " + i + ": "+matrix[i][2],true);
             if (!desire) {
                 matrix[i][countCoef + 2 + i] = -1;
                 matrix[i][countCoef + 2 + i + countLimit] = 1;
