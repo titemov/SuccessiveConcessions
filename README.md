@@ -1,4 +1,4 @@
 # SuccessiveConcessions
 Successive Concessions Method Java
 
-[Simplex](https://github.com/Developonz/SimplexMethod) method
+[Simplex method](https://github.com/Developonz/SimplexMethod)
