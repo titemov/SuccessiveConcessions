@@ -6,15 +6,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import javafx.scene.text.Font;
-
-import java.awt.*;
+import javafx.stage.Stage;
 
 public class Interface extends Application {
 
@@ -118,7 +112,7 @@ public class Interface extends Application {
         TextField compromiseTF = new TextField("0");
         compromiseTF.setLayoutX(150);
         compromiseTF.setLayoutY(205);
-        compromiseTF.setMaxWidth(30);
+        compromiseTF.setMaxWidth(75);
         inputGroup.getChildren().add(compromiseTF);
 
         Label resultLabel = new Label(" ");//
@@ -134,13 +128,16 @@ public class Interface extends Application {
         textArea.setMinWidth(765);
         textArea.setMaxWidth(765);
 
-        Button enterBtn = new Button("Ввести всё");
-        enterBtn.setLayoutX(270);
+        Button enterBtn = new Button("Рассчитать!");
+        enterBtn.setLayoutX(260);
         enterBtn.setLayoutY(205);
-        enterBtn.setMaxWidth(75);
+        enterBtn.setMinWidth(95);
+        enterBtn.setMaxWidth(95);
         enterBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                Log.initialEntry();
+                resultLabel.setText(" ");
                 double[][] aimTemp = new double[5][5];
                 double[][] restrictTemp = new double[5][6];
                 //double[][] restrictRightTemp = new double[5][1];
@@ -155,12 +152,7 @@ public class Interface extends Application {
                         restrictTemp[i][n]=Double.parseDouble(restrictTF[i][n].getText());
                     }
                 }
-//                for (int i=0; i<restrictTF.length; i++) {
-//                    for (int n = 0; n < restrictTF[0].length-(restrictTF[0].length-1); n++) {
-//                        //-1 because right side of equation in restrictRightInput
-//                        restrictRightInput[i][n]=Double.parseDouble(restrictTF[i][restrictTF[0].length-1].getText());
-//                    }
-//                }
+
                 for(int i = 0;i<maxMin.length;i++){
                     maxMin[i]= String.valueOf(aimCB[i][0].getValue());
                     //System.out.println(maxMin[i]);
@@ -177,25 +169,27 @@ public class Interface extends Application {
                     return;
                 }
 
-                resultLabel.setText(" ");
-                Matrix.printmat(aimInput);
-                Matrix.printmat(restrictInput);
-                //Matrix.printmat(restrictRightInput);
-
-                Backend.solve(aimInput,restrictInput,maxMin);
-                char[] text=Log.getText();
+//                Matrix.printmat(aimInput);
+//                Matrix.printmat(restrictInput);
+//                Matrix.printmat(restrictRightInput);
+                Backend.solve(aimInput,restrictInput,maxMin,compromiseInput);
+                String[] text=Log.getText();
+                int len=text.length;
+                int startPoint=0;
+                if (len>1000) startPoint=len-1000;
+                textArea.setText(" ");
                 if (text!=null){
-                    for (int i=0;i<text.length;i++) {
+                    for (int i=startPoint;i<text.length;i++) {
                         textArea.appendText(String.valueOf(text[i]));
-                        System.out.println(text[i]);
+                        //System.out.println(text[i]);
                     }
                     textArea.setFont(Font.font("Consolas", 14));
                 }
+                textArea.requestFocus();
+                textArea.end();
             }
         });
         inputGroup.getChildren().add(enterBtn);
-
-        Log.initialEntry();
 
         mainGroup.getChildren().addAll(inputGroup,textArea);
 

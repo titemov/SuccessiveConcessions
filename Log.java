@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.util.Date;
 
@@ -9,7 +11,7 @@ public class Log {
             String s = date.toString();
             int len = (int) raf.length();
             raf.seek(len);
-            raf.write(("\n\n----- "+s+" -----").getBytes());
+            raf.write(("\n\n\n\n|||||||||| "+s+" ||||||||||\n\n\n").getBytes());
             raf.close();
         }catch (Exception e){
             e.printStackTrace();
@@ -32,18 +34,26 @@ public class Log {
         }
     }
 
-    public static char[] getText(){
-        try{
-            RandomAccessFile raf = new RandomAccessFile("log.txt","r");
-            raf.seek(0);
-            char[] text= new char[(int) raf.length()];
-            for(int i=0;i<text.length;i++){
-                text[i]=raf.readChar();
+    public static String[] getText(){
+        int lineCount = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader("log.txt"))) {
+            while (reader.readLine() != null) {
+                lineCount++;
             }
-            raf.close();
-            return text;
-
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        String[] s = new String[lineCount];
+        try (BufferedReader br = new BufferedReader(new FileReader("log.txt"))) {
+            String line;
+            int i=0;
+            while ((line = br.readLine()) != null) {
+                s[i]=line+"\n";
+                i++;
+            }
+            return s;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

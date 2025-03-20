@@ -1,6 +1,7 @@
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Backend extends Interface {
@@ -10,7 +11,7 @@ public class Backend extends Interface {
     }
 
     public static double[][] arrayOptimization(double[][] array, boolean fromRestrict){
-        System.out.println("_______________");
+        //System.out.println("_______________");
         double[][] result;
         int minRowIndex=999;
         int minColumnIndex=999;
@@ -51,10 +52,84 @@ public class Backend extends Interface {
         return result;
     }
 
-    public static int solve(double[][] aimInput, double[][] restrictInput, String[] maxMin){
-        for (int i=0;i<aimInput.length;i++) {
-            SimplexMethod.inpMatrixManual(aimInput[i],restrictInput, maxMin[i]);
-            SimplexMethod.solveTask();
+    public static int solve(double[][] aimInput, double[][] restrictInput, String[] maxMin,double compromiseInput) {
+        double ans;
+        int restrictInputRows = restrictInput.length;
+        int restrictInputColumns = restrictInput[0].length;
+
+        SimplexMethod.inpMatrixManual(aimInput[0], restrictInput, maxMin[0]);
+        try {
+            ans=SimplexMethod.solveTask();
+        } catch (Exception e) {
+            System.out.println(e);
+            return 1;
+        }
+
+        if (aimInput.length - 1 < 1) return 1;
+
+        for (int i = 1; i < aimInput.length; i++) {
+            double[][] newRestricted = new double[restrictInputRows + 1][restrictInputColumns];
+            for (int n = 0; n < restrictInput.length; n++) {
+                for (int j = 0; j < restrictInput[0].length; j++) {
+                    newRestricted[n][j]=restrictInput[n][j];
+                }
+            }
+            for(int n=0;n<aimInput[0].length;n++){
+                newRestricted[newRestricted.length-1][n]=aimInput[i-1][n];
+            }
+
+            Matrix.printmat(newRestricted);
+
+            double ans1;
+            double ans2;
+
+            if (maxMin[i-1].equals("max")) {
+                newRestricted[newRestricted.length - 1][newRestricted[0].length - 1] = ans-compromiseInput;
+                SimplexMethod.inpMatrixManual(aimInput[i], newRestricted, maxMin[i]);
+                try {
+                    ans1=SimplexMethod.solveTask();
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return 1;
+                }
+                newRestricted[newRestricted.length - 1][newRestricted[0].length - 1] = ans;
+                SimplexMethod.inpMatrixManual(aimInput[i], newRestricted, maxMin[i]);
+                try {
+                    ans2=SimplexMethod.solveTask();
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return 1;
+                }
+                if (maxMin[i].equals("max")) {
+                    ans = Math.max(ans1, ans2);
+                }else{
+                    ans=Math.min(ans1,ans2);
+                }
+            }else{
+                newRestricted[newRestricted.length - 1][newRestricted[0].length - 1] = ans+compromiseInput;
+                SimplexMethod.inpMatrixManual(aimInput[i], newRestricted, maxMin[i]);
+                try {
+                    ans1=SimplexMethod.solveTask();
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return 1;
+                }
+                newRestricted[newRestricted.length - 1][newRestricted[0].length - 1] = ans;
+                SimplexMethod.inpMatrixManual(aimInput[i], newRestricted, maxMin[i]);
+                try {
+                    ans2=SimplexMethod.solveTask();
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return 1;
+                }
+                if (maxMin[i].equals("max")) {
+                    ans = Math.max(ans1, ans2);
+                }else{
+                    ans=Math.min(ans1,ans2);
+                }
+            }
+            Log.writeLog("------- ОТВЕТ: "+String.valueOf(ans)+" -------",true);
+
         }
         return 0;
     }
