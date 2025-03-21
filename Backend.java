@@ -54,12 +54,14 @@ public class Backend extends Interface {
 
     public static int solve(double[][] aimInput, double[][] restrictInput, String[] maxMin,double compromiseInput) {
         double ans;
+        String fullAns = new String();
         int restrictInputRows = restrictInput.length;
         int restrictInputColumns = restrictInput[0].length;
 
         SimplexMethod.inpMatrixManual(aimInput[0], restrictInput, maxMin[0]);
         try {
             ans=SimplexMethod.solveTask();
+            fullAns+="1) "+String.valueOf(ans)+" ";
         } catch (Exception e) {
             System.out.println(e);
             return 1;
@@ -128,9 +130,9 @@ public class Backend extends Interface {
                     ans=Math.min(ans1,ans2);
                 }
             }
-            Log.writeLog("------- ОТВЕТ: "+String.valueOf(ans)+" -------",true);
-
+            fullAns+=(i+1)+") "+ans+" ";
         }
+        Log.writeLog("------- ОТВЕТ: "+fullAns+" -------",true);
         return 0;
     }
 
