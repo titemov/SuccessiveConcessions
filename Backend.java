@@ -1,7 +1,3 @@
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-
-import java.util.Arrays;
 import java.util.Random;
 
 public class Backend extends Interface {
@@ -68,7 +64,19 @@ public class Backend extends Interface {
         }
 
         if (aimInput.length - 1 < 1) return 1;
-
+        //new (добавляется +1 новое ограничение из функций цели)
+//        for (int i = 1; i < aimInput.length; i++) {
+//            double[][] newRestricted = new double[restrictInputRows + i][restrictInputColumns];
+//            for (int n = 0; n < restrictInput.length; n++) {
+//                for (int j = 0; j < restrictInput[0].length; j++) {
+//                    newRestricted[n][j]=restrictInput[n][j];
+//                }
+//            }
+//            restrictInput=newRestricted;
+//            for(int n=0;n<aimInput[0].length;n++){
+//                newRestricted[newRestricted.length-1][n]=aimInput[i-1][n];
+//            }
+        //old (последнее перезаписывается)
         for (int i = 1; i < aimInput.length; i++) {
             double[][] newRestricted = new double[restrictInputRows + 1][restrictInputColumns];
             for (int n = 0; n < restrictInput.length; n++) {
