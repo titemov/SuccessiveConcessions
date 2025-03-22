@@ -65,28 +65,28 @@ public class Backend extends Interface {
 
         if (aimInput.length - 1 < 1) return 1;
         //new (добавляется +1 новое ограничение из функций цели)
-//        for (int i = 1; i < aimInput.length; i++) {
-//            double[][] newRestricted = new double[restrictInputRows + i][restrictInputColumns];
-//            for (int n = 0; n < restrictInput.length; n++) {
-//                for (int j = 0; j < restrictInput[0].length; j++) {
-//                    newRestricted[n][j]=restrictInput[n][j];
-//                }
-//            }
-//            restrictInput=newRestricted;
-//            for(int n=0;n<aimInput[0].length;n++){
-//                newRestricted[newRestricted.length-1][n]=aimInput[i-1][n];
-//            }
-        //old (последнее перезаписывается)
         for (int i = 1; i < aimInput.length; i++) {
-            double[][] newRestricted = new double[restrictInputRows + 1][restrictInputColumns];
+            double[][] newRestricted = new double[restrictInputRows + i][restrictInputColumns];
             for (int n = 0; n < restrictInput.length; n++) {
                 for (int j = 0; j < restrictInput[0].length; j++) {
                     newRestricted[n][j]=restrictInput[n][j];
                 }
             }
+            restrictInput=newRestricted;
             for(int n=0;n<aimInput[0].length;n++){
                 newRestricted[newRestricted.length-1][n]=aimInput[i-1][n];
             }
+        //old (последнее перезаписывается)
+//        for (int i = 1; i < aimInput.length; i++) {
+//            double[][] newRestricted = new double[restrictInputRows + 1][restrictInputColumns];
+//            for (int n = 0; n < restrictInput.length; n++) {
+//                for (int j = 0; j < restrictInput[0].length; j++) {
+//                    newRestricted[n][j]=restrictInput[n][j];
+//                }
+//            }
+//            for(int n=0;n<aimInput[0].length;n++){
+//                newRestricted[newRestricted.length-1][n]=aimInput[i-1][n];
+//            }
 
             Matrix.printmat(newRestricted);
 
@@ -139,6 +139,7 @@ public class Backend extends Interface {
                 }
             }
             fullAns+=(i+1)+") "+ans+" ";
+            newRestricted[newRestricted.length - 1][newRestricted[0].length - 1] = ans;
         }
         Log.writeLog("------- ОТВЕТ: "+fullAns+" -------",true);
         return 0;
