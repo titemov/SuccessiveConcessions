@@ -1,5 +1,5 @@
 # SuccessiveConcessions
-Successive Concessions Method Java. Might be mathematically wrong =)
+Successive Concessions Method Java. 
 
 [Simplex method](https://github.com/Developonz/SimplexMethod)
 
