@@ -17,9 +17,11 @@ JavaFX version 23.0.1
 3. To compile, open command line in __source code directory__ and write  
    `javac.exe --module-path {Path to your javafx lib folder} --add-modules=javafx.controls Main.java`
 
-    - For example if JavaFx contents extracted to `С:\Java`  
+    - For example if JavaFx contents extracted to `С:\Java`
       Then command should look like this:  
-      `javac.exe --module-path "C:\Java\javafx-sdk-23.0.1\lib" --add-modules=javafx.controls Main.java`
+      `javac.exe --module-path "C:\Java\javafx-sdk-23.0.1\lib" --add-modules=javafx.controls Main.java` 
+    - If you have problems with javac.exe, try to write __absolute path__ to javac.exe
+      
 
 4. After compilation run `Main` file:  
    `java --module-path {Path to your javafx lib folder} --add-modules=javafx.controls Main`
